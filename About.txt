@@ -1,0 +1,86 @@
+About:
+
+RepoCrawler, is to open up a codebase repository, look through necessary files, create notes and keywords to search for each component, map everything, and then we will create a functional UI to be able to query questions about what it does, how to operate it, etc
+
+RepoCrawler/
+│
+├── main.py                  # Entry point of the application, sets up the QApplication
+├── app/
+│   ├── __init__.py          # Initializes the Python package
+│   ├── analysis/
+│   │   ├── __init__.py      # Initializes the analysis package
+│   │   ├── summarizer.py    # Handles AI-based summarization of code
+│   │   ├── keyword_extractor.py # Extracts keywords from the code and summaries
+│   │   └── dependency_mapper.py # Maps dependencies and imports in the code
+│   │   ├── file_parser.py   # Traverses directories and filters relevant files
+│   │   └── file_copier.py   # Handles copying of files to the data directory
+│   └── config/
+│       ├── __init__.py      # Initializes the mapping package
+│       └── settings.py 		# settings for extensions for files and directories
+|
+│   └── mapping/
+│       ├── __init__.py      # Initializes the mapping package
+│       └── graph_builder.py # Builds graphical representations of dependencies
+
+│
+├── data/
+│   └── [project folders]    # Data directory for storing project-specific analysis
+│
+├── ui/
+│   ├── __init__.py          # Initializes the UI package
+│   ├── mainwindow.py        # Qt Designer UI file for the main window
+│   └── clone.py             # Handles UI for cloning repositories
+│
+├── resources/
+│   ├── __init__.py          # Resource management
+│   └── icons/               # Icons and other static resources
+│       └── crawler.png      # Icon for the application
+│
+└── tests/
+    ├── __init__.py          # Initializes the testing package
+    ├── test_analysis.py     # Tests for analysis functionalities
+    ├── test_filehandling.py # Tests for file handling capabilities
+    └── test_mapping.py      # Tests for dependency mapping functionalities
+
+
+Action Plan for Repository Analysis
+
+Define File Relevance Criteria:
+-Determine which file types are relevant (e.g., .py, .js).
+-Define exclusion criteria for files that typically don't contain useful code or comments (e.g., binary files, configuration files like .json and .yaml unless they are part of the functionality, etc.).
+
+Develop File Parsing Mechanism:
+-Implement functionality in the filehandling module to traverse directories and identify relevant files.
+-Use regex or similar methods to filter files based on the defined criteria.
+
+Integrate AI for Code Summarization:
+-Utilize an AI service (like OpenAI Codex or your own trained model) to generate summaries for the contents of each file.
+-Ensure you handle rate limits and optimize API calls for efficiency and cost-effectiveness.
+
+Keyword Extraction:
+-Develop methods in the analysis module to extract keywords from both the code and its AI-generated summaries.
+-Consider natural language processing (NLP) techniques to refine keyword extraction and relevance.
+
+Dependency and Import Mapping:
+-Analyze import statements in code files to map dependencies and file connections.
+-Implement graph-based structures in the mapping module to visualize and store these relationships.
+
+Generate Helper Files:
+-Design a system to create and save helper files with keywords, summaries, and dependency maps.
+-Ensure these files are easily accessible and organized logically within the data directory.
+
+User Interface for Analysis Results:
+-Update the ui module to display summaries, keywords, and maps within the application.
+-Provide interactive elements to explore different components of the analysis.
+
+Handling Large Repositories:
+-Implement asynchronous processing to handle large repositories without blocking the main UI.
+-Use progress indicators to provide feedback during long-running operations.
+
+Optimization and Testing:
+-Continuously test the system with different types of repositories to ensure robustness and reliability.
+-Optimize the code for performance, especially when dealing with large and complex repositories.
+
+Documentation and Help System:
+-Document how to use the analysis features and interpret the results.
+-Provide in-app guidance or tooltips to help users navigate the analysis results.
