@@ -5,6 +5,7 @@ RepoCrawler, is to open up a codebase repository, look through necessary files, 
 RepoCrawler/
 │
 ├── main.py                  # Entry point of the application, sets up the QApplication
+├── credentials.txt                  # OpenAI API key
 ├── app/
 │   ├── __init__.py          # Initializes the Python package
 │   ├── analysis/
