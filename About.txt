@@ -10,27 +10,34 @@ RepoCrawler/
 │   ├── __init__.py          # Initializes the Python package
 │   ├── analysis/
 │   │   ├── __init__.py      # Initializes the analysis package
-│   │   ├── summarizer.py    # Handles AI-based summarization of code
+│   │   ├── code_summarizer.py    # Handles AI-based summarization of code
 │   │   ├── keyword_extractor.py # Extracts keywords from the code and summaries
 │   │   └── dependency_mapper.py # Maps dependencies and imports in the code
 │   │   ├── file_parser.py   # Traverses directories and filters relevant files
-│   │   └── file_copier.py   # Handles copying of files to the data directory
-│   └── config/
+│   │   └── document_summarizer.py   # Handles summarization of repo documentation
+│   ├── config/
+│   │   ├── __init__.py      # Initializes the mapping package
+│   │   └── settings.py 		# settings for extensions for files and directories
+│   │
+│   ├── mapping/
+│   │   ├── __init__.py      # Initializes the mapping package
+│   │   └── graph_builder.py # Builds graphical representations of dependencies
+│   │
+│   └── query/
 │       ├── __init__.py      # Initializes the mapping package
-│       └── settings.py 		# settings for extensions for files and directories
+│       ├── query_controller.py # Builds UI for chatbox
+│       └── chathandler.py # Handles chat call to chat gpt
 |
-│   └── mapping/
-│       ├── __init__.py      # Initializes the mapping package
-│       └── graph_builder.py # Builds graphical representations of dependencies
-
 │
 ├── data/
-│   └── [project folders]    # Data directory for storing project-specific analysis
-│
+│   ├── [project folders]    # Data directory for storing project-specific analysis
+│   └── repo_metadata/             # carrys helper files and summaries and data from analysis
+|
 ├── ui/
 │   ├── __init__.py          # Initializes the UI package
-│   ├── mainwindow.py        # Qt Designer UI file for the main window
-│   └── clone.py             # Handles UI for cloning repositories
+│   ├── MainWindow.py        # Qt Designer UI file for the main window
+│   └── Clone.py             # Handles UI for cloning repositories
+│   └── Query.py             # Handles UI for querying
 │
 ├── resources/
 │   ├── __init__.py          # Resource management

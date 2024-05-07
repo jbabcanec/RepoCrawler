@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.Clone import CloneRepoDialog
+from ui.Query import QueryDialog
 from app.analysis.analyze import AnalysisController
 
 import os
@@ -41,7 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.queryButton = QtWidgets.QPushButton("Query", self)
         self.queryButton.setGeometry(QtCore.QRect(80, 240, 121, 23))
-        self.queryButton.setEnabled(False)  # Initially disabled
+        #self.queryButton.setEnabled(False)  # Initially disabled
 
         # Connect signals
         self.uploadButton.clicked.connect(self.upload_repository)
@@ -128,8 +129,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.queryButton.setEnabled(True)  # Enable query button after showing map
 
     def query_repository(self):
-        print("Query repository clicked")
-        # Implementation of querying logic goes here
+        # Show the QueryDialog
+        self.queryDialog = QueryDialog(self)
+        self.queryDialog.show()
 
 if __name__ == "__main__":
     import sys
