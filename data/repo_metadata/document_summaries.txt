@@ -1,0 +1,4 @@
+Processed document: requirements.txt
+Summary: Requirements for application development using PyQt5, openai, requests, and pandas.
+Processed document: README.md
+Summary: DayMaker is an itinerary builder that uses the GPT-4 API to generate a detailed hour-by-hour itinerary. To use, download the `requirements.txt` file and install the necessary packages. Fill out all tabs and use full names of cities with state. Obtain an OpenAI API key and put it in a `credentials.txt` file. No redistribution or commercial use without permission from the author. Contact joseph.babz@gmail.com for inquiries.

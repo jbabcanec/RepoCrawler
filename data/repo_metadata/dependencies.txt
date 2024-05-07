@@ -1,6 +1,6 @@
 Script Dependencies:
-init_questions.py -> PyQt5.QtWidgets, PyQt5.QtCore, PyQt5.QtGui, main.py
 main.py -> init_questions.py, gps_panel.py, final_checklist.py, send_to_ai.py
-gps_panel.py has no script dependencies.
-send_to_ai.py -> :
-final_checklist.py -> 'PyQt5.QtWidgets' and 'PyQt5.QtCore', 'math', 'QLabel', '
+final_checklist.py -> Script2 (init_questions.py):
+gps_panel.py -> PyQt5.QtWidgets, PyQt5.QtCore, PyQt5.QtGui, requests, QMessageBox, main.py
+init_questions.py -> PyQt5.QtWidgets, PyQt5.QtCore, PyQt5.QtGui, QMessageBox, QTabWidget, QGroupBox, QVBoxLayout, QLineEdit, QSpinBox, QCheckBox, QTextEdit, QSlider, QHBoxLayout, QPushButton
+send_to_ai.py has no script dependencies.

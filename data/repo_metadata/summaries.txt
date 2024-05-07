@@ -1,20 +1,17 @@
-Processed file: init_questions.py
-Summary: This code creates a GUI for users to input their travel preferences, including destination, duration, budget, and interests. It also includes validation checks and a "Next" button to proceed to the next step.
 Processed file: main.py
-Summary: MainController class is initialized with an API key read from credentials.txt and creates instances of InitQuestions, GPSPanel, and FinalChecklist. User inputs are collected and stored in a dictionary. The program transitions between panels and exports user inputs to a CSV file. The CSV file is then processed with GPTTurboProcessor to generate itineraries and a message box is displayed to the user.
-Processed file: gps_panel.py
-Summary: GPSPanel class with a signal and methods to get data from the panel. The panel contains a starting location input, a 'Use My Location' button, a round trip checkbox, and a next button. The 'Use My Location' button fetches the user's current location and displays it in the starting location input. The next button performs a validation check for the starting location and emits the signal if it passes. Additional methods are available to retrieve the starting location and round trip information from the panel
-Processed file: send_to_ai.py
-Summary: Class GPTTurboProcessor: 
-- Initializes with API key and file paths 
-- Appends content to output file 
-- Makes initial call for hotel recommendation 
-- Processes first, middle, and last rows of CSV 
-- Extracts and deduplicates places from itinerary 
-- Writes places to file 
-- Reads previous days' places to avoid repetition 
-- Constructs itinerary prompt based on row data 
-- Makes call to OpenAI's GPT-4 using chat completions endpoint 
--
+Summary: MainController class is initialized with an API key read from credentials.txt and creates instances of InitQuestions, GPSPanel, and FinalChecklist. Signals are connected to handlers for transitioning between panels and collecting user inputs. User inputs are collected and exported to a CSV file, which is then processed by GPTTurboProcessor to generate itineraries. A message box is displayed to the user upon completion.
 Processed file: final_checklist.py
-Summary: A PyQt5 application for creating a final checklist with tabs for start and end times, dining options, limitations, and number of travelers. Includes functions for validation checks, data collection, and retrieving user inputs.
+Summary: PyQt5 library is imported for GUI creation. A class called FinalChecklist is created with a signal for the next button. The UI is initialized with a tab widget and a layout for buttons. The tab widget contains four tabs for start and end time, dining options, limitations, and number of travelers. User inputs are validated and collected upon clicking the next button. Methods are provided to retrieve start and end times, dining options, limitations, and number of travelers.
+Processed file: gps_panel.py
+Summary: GPSPanel class with a signal, window title, and window size. Includes a starting location input, 'Use My Location' button, round trip checkbox, and next button. onUseMyLocation method uses requests library to get location data and sets it in the starting location input. onNextClicked method validates starting location input and emits the nextClicked signal. Additional methods to get starting location and round trip checkbox data.
+Processed file: init_questions.py
+Summary: - Creates a window with tabs for location, duration, budget, and interests
+- Allows user to input destination, duration, budget, and interests
+- Validates user input and emits a signal when "Next" button is clicked
+- Enables hotel suggestion checkbox only if duration is greater than 0
+Processed file: send_to_ai.py
+Summary: - Imports necessary libraries and sets up API key
+- Defines class for processing with methods for appending to file, making initial hotel call, and processing rows in CSV
+- Reads CSV file and checks for hotel recommendation in first row
+- Processes first row, middle rows, and last row based on provided information and previous days' places
+- Writes itinerary and deduplicated places to files for each day
