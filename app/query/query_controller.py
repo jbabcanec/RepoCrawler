@@ -12,6 +12,7 @@ class QueryController:
         self.data_directory = data_directory
         self.history_file = os.path.join(self.data_directory, 'chat_history.txt')
         self.chat_history = self.load_chat_history()
+        self.metadata = self.load_metadata_files()
 
     def load_api_key(self):
         try:
@@ -21,6 +22,25 @@ class QueryController:
             raise FileNotFoundError("API Key file not found. Ensure that credentials.txt is available.")
         except Exception as e:
             raise Exception(f"An error occurred while reading the API key: {str(e)}")
+
+    def load_metadata_files(self):
+        """Load all relevant metadata files for context enhancement."""
+        metadata_files = {
+            'dependencies': 'dependencies.txt',
+            'directory_tree': 'directory_tree.txt',
+            'document_summaries': 'document_summaries.txt',
+            'keywords': 'keywords.txt',
+            'summaries': 'summaries.txt'
+        }
+        metadata = {}
+        for key, filename in metadata_files.items():
+            filepath = os.path.join(self.data_directory, filename)
+            try:
+                with open(filepath, 'r') as file:
+                    metadata[key] = file.read()
+            except FileNotFoundError:
+                metadata[key] = f"{key} information not available."
+        return metadata
 
     def send_query(self, query):
         context = self.get_context()
@@ -43,5 +63,13 @@ class QueryController:
             file.write(f"{entry_number}. You: {query}|{entry_number}. Bot: {response}\n")
 
     def get_context(self):
-        context_lines = [" ".join(str(item) for item in pair) for pair in self.chat_history]
-        return "\n".join(context_lines)
+        """Generate context from the chat history and metadata for the AI."""
+        context_parts = [
+            f"Dependencies:\n{self.metadata['dependencies']}",
+            f"Directory Structure:\n{self.metadata['directory_tree']}",
+            f"Document Summaries:\n{self.metadata['document_summaries']}",
+            f"Important Keywords:\n{self.metadata['keywords']}",
+            f"File Summaries:\n{self.metadata['summaries']}",
+            "\n".join(f"{item[0]} {item[1]}" for item in self.chat_history)
+        ]
+        return "\n\n".join(context_parts)

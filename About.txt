@@ -32,6 +32,12 @@ RepoCrawler/
 ├── data/
 │   ├── [project folders]    # Data directory for storing project-specific analysis
 │   └── repo_metadata/             # carrys helper files and summaries and data from analysis
+│       ├── chat_history.txt		# Cumulative chat history
+│       ├── dependencies.txt		#lists dependencies in a script1 -> script2 format
+│       ├── directory_tree.txt		# is a tree showing the file structure
+│       └── document_summaries.txt		# gives a concsie summary of documentation files
+│       ├── keywords.txt			# gives a concise list of important keywords and concepts for each relevant file in the codebase
+│       └── summaries.txt			#gives concise summaries of all relevant files in the codebase
 |
 ├── ui/
 │   ├── __init__.py          # Initializes the UI package

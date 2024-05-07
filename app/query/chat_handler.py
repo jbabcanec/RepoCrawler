@@ -6,14 +6,12 @@ class ChatHandler:
         self.api_key = api_key
 
     def ask_chatgpt(self, question, context=""):
-        """Send a question and context to the ChatGPT API and return the response, positioning the AI as a helpful assistant."""
-        # Define the AI's role and explain that it should remember past interactions.
         role_description = (
-            "You are a helpful assistant. Remember previous interactions during this session to provide "
-            "contextually relevant responses. Here is the recent conversation history:\n"
+            "As a helpful assistant for RepoCrawler, utilize the detailed metadata about the project to "
+            "provide informed responses about the codebase, its usage, and documentation. Below is the project context:\n"
         )
-        # Build the full prompt with the role description and context
-        full_prompt = f"{role_description}{context}\nYour task: {question}"
+        full_prompt = f"{role_description}{context}\nQuestion: {question}\nAnswer:"
+        print(full_prompt)
         try:
             response = openai.Completion.create(
                 model="gpt-3.5-turbo-instruct",

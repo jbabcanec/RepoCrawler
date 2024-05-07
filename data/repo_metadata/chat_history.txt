@@ -3,3 +3,5 @@ what was the last question i asked you|I am an AI and do not have the ability to
 3. You: how much does the sun weigh|3. Bot: The sun has a mass of approximately 1.989 x 10^30 kilograms.
 4. You: how much does the sun weigh|4. Bot: Bot: The sun has a mass of approximately 1.989 x 10^30 kilograms.
 5. You: what question did i just ask you|5. Bot: You just asked me how much the sun weighs.
+6. You: what does this repo do|6. Bot: This repository contains code for an itinerary builder called DayMaker. It uses the GPT-4 API to generate a detailed hour-by-hour itinerary based on user inputs. The code collects user inputs through a series of questions and panels, saves them to a CSV file, and then processes the file with GPTTurboProcessor to generate the itinerary. It also utilizes external libraries such as PyQt5 for GUI development and requests for API integration.
+7. You: what kind of questions does it ask|7. Bot: This repo is an itinerary builder that uses the GPT-4 API to generate a detailed hour-by-hour itinerary. It asks questions about the user's travel preferences, such as destination, duration, budget, and interests.
