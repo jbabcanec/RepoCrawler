@@ -4,9 +4,14 @@
 INCLUDE_EXTENSIONS = {
     '.py', '.js', '.java', '.cpp', '.c', '.cs', '.tsx', '.ts', '.php', '.rb', '.swift', 
     '.go', '.scala', '.kt', '.rs', '.lua', '.groovy', '.perl', '.sh', '.bat', '.ps1',
-    '.html', '.css', '.scss', '.less', '.md', '.rst', '.tex', '.sql', '.pl', '.r', 
-    '.m', '.mm', '.vue', '.yaml', '.yml', '.xml', '.json', '.toml', '.config', '.conf',
-    '.htm', '.markdown', '.mdown', '.mkdn', '.mkd', '.asciidoc', '.adoc', '.ad', '.docx', '.pdf'
+    '.html', '.css', '.scss', '.less', '.sql', '.pl', '.r', '.m', '.mm', '.vue', 
+    '.yaml', '.yml', '.xml', '.json', '.toml', '.config', '.conf'
+}
+
+# New set of extensions specifically for document files used in documentation summarizer
+DOCUMENT_EXTENSIONS = {
+    '.md', '.rst', '.tex', '.htm', '.markdown', '.mdown', '.mkdn', '.mkd', 
+    '.asciidoc', '.adoc', '.ad', '.docx', '.pdf', '.txt'
 }
 
 # List of file extensions to exclude from analysis

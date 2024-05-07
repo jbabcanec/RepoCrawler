@@ -1,0 +1,52 @@
+Processed file: init_questions.py
+Keywords: High-level functionalities:
+- The code creates a GUI window for users to input initial information for a travel planning application.
+- The user can input their desired destination, duration of the trip, budget, and interests.
+- The code includes validation checks to ensure that all required information is entered before proceeding.
+- The code includes a "Next" button that emits a signal when clicked, indicating that the user is finished inputting their initial information.
+- The code also includes a function to check if the user has selected the option to suggest hotels based on their input.
+
+Important concepts:
+- The code uses PyQt5, a Python wrapper for the Qt framework, to create the GUI.
+- The code uses various widgets from the PyQt5 library, such as Q
+Processed file: main.py
+Keywords: High-level functionalities:
+- The code imports necessary libraries, including PyQt5 for creating GUI applications.
+- The code creates a MainController class, which is responsible for managing the flow of the application and connecting different components.
+- The code reads an API key from a credentials file and uses it to create an instance of the GPTTurboProcessor class, which is used to process user inputs and generate itineraries.
+- The code creates instances of three different classes: InitQuestions, GPSPanel, and FinalChecklist. These classes represent different panels in the application and handle user inputs and data collection.
+- The code connects signals from the different panels to corresponding handlers in the MainController class.
+- The code collects user inputs from the different panels and
+Processed file: gps_panel.py
+Keywords: High-level functionalities:
+1. Create a GPS panel widget that can be used in a larger application.
+2. Allow users to input a starting location.
+3. Provide a button to automatically populate the starting location with the user's current location.
+4. Allow users to select whether they want a round trip or not.
+5. Provide a "Next" button to move on to the next step in the application.
+6. Validate user input for the starting location.
+7. Get the starting location and round trip information from the panel for use in the larger application.
+
+Key concepts:
+1. PyQt5 - a Python library for creating GUI applications.
+2. QWidget - a base class for all user interface objects in PyQt5.
+3. QVBoxLayout - a
+Processed file: send_to_ai.py
+Keywords: High-level functionalities:
+1. The code processes a CSV file containing user inputs for a trip itinerary and uses OpenAI's GPT-4 model to generate a detailed itinerary.
+2. The code can handle multiple days of a trip and can incorporate user preferences such as budget, interests, and limitations.
+3. The code can also generate a hotel recommendation based on the user's destination and budget.
+4. The code can handle different scenarios such as a round trip or a one-way trip.
+5. The code can handle dining options and can suggest places to eat based on the user's provided times.
+6. The code can avoid repeating places that have already been visited in previous days of the trip.
+7. The code can handle errors and exceptions
+Processed file: final_checklist.py
+Keywords: High-level functionalities:
+1. Creates a GUI for users to input final details for a trip.
+2. Allows users to input start and end times, dining options, limitations, and number of travelers.
+3. Validates user inputs before emitting a signal to proceed to the next step.
+4. Retrieves user inputs and stores them in a dictionary.
+5. Adjusts time inputs based on the duration of the trip and handles cases where there are additional hours.
+6. Uses external libraries such as PyQt5 for creating the GUI and math for calculations.
+7. Utilizes various PyQt5 widgets such as QTabWidget, QGroupBox, QTimeEdit, QSpinBox, and QTextEdit for user input and display.
+8. Connects signals to methods for

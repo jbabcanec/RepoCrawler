@@ -7,12 +7,14 @@ class CodeSummarizer:
         self.api_key = api_key
 
     def create_prompt(self, file_path):
-        """Create a prompt for summarization including the file name for context."""
+        """Create a prompt for summarization including the file name for context, requesting a hyper-compressed summary."""
         try:
             file_name = os.path.basename(file_path)
             with open(file_path, 'r', encoding='utf-8') as file:
                 content = file.read()
-            prompt = f"Summarize the following {file_name} code in terms of its functionality:\n\n### Code\n{content}\n### End Code"
+            # Update the prompt to specify the need for a highly compressed summary
+            prompt = (f"Provide a hyper-compressed, highly concise summary of the following {file_name} code, "
+                      f"focusing strictly on critical functionalities:\n\n### Code\n{content}\n### End Code")
             return prompt
         except Exception as e:
             return f"Failed to read file {file_path}: {str(e)}"
@@ -23,8 +25,8 @@ class CodeSummarizer:
             response = openai.Completion.create(
                 model="gpt-3.5-turbo-instruct",
                 prompt=prompt,
-                max_tokens=150,
-                temperature=0.5,
+                max_tokens=100,  # Reduced max tokens to encourage brevity
+                temperature=0.3,  # Lower temperature for more focused and deterministic output
                 top_p=1.0,
                 n=1,
                 stop=["### End Code"],

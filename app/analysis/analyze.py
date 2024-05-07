@@ -1,11 +1,10 @@
-# analyze.py
-from app.config.settings import INCLUDE_EXTENSIONS, EXCLUDE_EXTENSIONS, EXCLUDE_DIRECTORIES
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from app.config.settings import *
 from .file_parser import find_relevant_files
 from .tree import generate_directory_tree
-from .summarizer import CodeSummarizer
-# from .keyword_extractor import extract_keywords
-# from .dependency_mapper import map_dependencies
-# from .file_copier import copy_files_to_data
+from .code_summarizer import CodeSummarizer
+from .keyword_extractor import KeywordExtractor
+from .dependency_mapper import DependencyMapper
 import os
 
 class AnalysisController:
@@ -13,12 +12,13 @@ class AnalysisController:
         self.root_directory = root_directory
         self.api_key = self.load_api_key()
         self.summarizer = CodeSummarizer(self.api_key)
-        self.data_directory = os.path.join(root_directory, "data")
-        self.metadata_directory = os.path.join(self.data_directory, "repo_metadata")
-        os.makedirs(self.metadata_directory, exist_ok=True)
+        self.keyword_extractor = KeywordExtractor(self.api_key)
+        self.dependency_mapper = DependencyMapper(self.api_key)
+
+        self.data_directory = os.path.join(os.path.dirname(root_directory), "repo_metadata")
+        os.makedirs(self.data_directory, exist_ok=True)
 
     def load_api_key(self):
-        """Loads the API key from a hard-coded relative file path."""
         api_key_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.txt')
         try:
             with open(api_key_path, 'r') as file:
@@ -29,14 +29,44 @@ class AnalysisController:
             raise Exception(f"An error occurred while reading the API key: {str(e)}")
 
     def run_analysis(self):
-        print("Generating directory tree...")
         directory_tree = generate_directory_tree(self.root_directory, EXCLUDE_DIRECTORIES)
-        files = find_relevant_files(self.root_directory, INCLUDE_EXTENSIONS, EXCLUDE_EXTENSIONS, EXCLUDE_DIRECTORIES)
-        
-        print("Files considered for analysis:")
-        for file_path in files:
-            summary = self.summarizer.summarize_file(file_path)
-            print(f"Summary for {os.path.basename(file_path)}:\n{summary}\n")
+        self.save_text_file('directory_tree.txt', str(directory_tree))
 
-    def save_analysis_results(self, file_path, summary, keywords, dependencies):
-        pass  # To be implemented
+        files = find_relevant_files(self.root_directory, INCLUDE_EXTENSIONS, EXCLUDE_EXTENSIONS, EXCLUDE_DIRECTORIES)
+        summaries = []
+        keywords_list = []
+
+        with ThreadPoolExecutor(max_workers=16) as executor:
+            future_to_file = {executor.submit(self.process_file, file_path, directory_tree): file_path for file_path in files}
+            for future in as_completed(future_to_file):
+                file_path = future_to_file[future]
+                try:
+                    file_results = future.result()
+                    summaries.append(f"Processed file: {os.path.basename(file_path)}\nSummary: {file_results['summary']}")
+                    if isinstance(file_results['keywords'], list):
+                        formatted_keywords = ', '.join(file_results['keywords'])
+                    else:
+                        formatted_keywords = file_results['keywords']
+                    keywords_list.append(f"Processed file: {os.path.basename(file_path)}\nKeywords: {formatted_keywords}")
+                except Exception as e:
+                    print(f'Exception processing file {file_path}: {e}')
+
+        self.save_text_file('summaries.txt', "\n".join(summaries))
+        self.save_text_file('keywords.txt', "\n".join(keywords_list))
+
+        # Save dependencies after all files have been processed
+        dependencies = self.dependency_mapper.get_dependencies()
+        self.save_text_file('dependencies.txt', dependencies)
+
+    def process_file(self, file_path, directory_tree):
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        summary = self.summarizer.summarize_file(file_path)
+        keywords = self.keyword_extractor.get_file_keywords(file_path)
+        self.dependency_mapper.map_file_dependencies(file_path, content, directory_tree)
+        return {'summary': summary, 'keywords': keywords}
+
+    def save_text_file(self, file_name, content):
+        path = os.path.join(self.data_directory, file_name)
+        with open(path, 'w', encoding='utf-8') as file:
+            file.write(content)
