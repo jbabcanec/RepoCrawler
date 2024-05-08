@@ -7,9 +7,9 @@ class FileInquiryHandler:
         self.api_key = api_key
         self.data_directory = data_directory
 
-    def should_fetch_files(self, question, context):
+    def should_fetch_files(self, question, context, chat_history):
         """Ask GPT if specific files are necessary to enhance the answer to a question."""
-        prompt = (f"{context}\nGiven the comprehensive summary and keywords already provided, "
+        prompt = (f"Context: {context}\n Recent Conversations: \n{chat_history} \nGiven the comprehensive summary and keywords already provided, "
                   f"is it very strictly necessary to reference specific files to answer the query '{question}'? "
                   "Please conservatively answer only 'yes' or 'no' and list the files if 'yes' only if absolutely essential. "
                   "We want to use the minimum amount of files to contextualize as possible. Do not provide files if answer is 'no'")

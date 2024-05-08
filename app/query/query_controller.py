@@ -47,7 +47,8 @@ class QueryController:
 
     def send_query(self, query):
         context = self.get_context()
-        needs_files, files_needed = self.file_inquiry_handler.should_fetch_files(query, context)
+        chat_history_as_string = "\n".join(f"{item[0]} {item[1]}" for item in self.chat_history)
+        needs_files, files_needed = self.file_inquiry_handler.should_fetch_files(query, context, chat_history_as_string)
         if needs_files and files_needed:
             additional_context = self.file_inquiry_handler.get_file_content(files_needed)
             context += additional_context
