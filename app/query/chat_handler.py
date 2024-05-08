@@ -11,7 +11,7 @@ class ChatHandler:
             "provide informed responses about the codebase, its usage, and documentation. Below is the project context:\n"
         )
         full_prompt = f"{role_description}{context}\nQuestion: {question}\nAnswer:"
-        print(full_prompt)
+        #print(full_prompt)
         try:
             response = openai.Completion.create(
                 model="gpt-3.5-turbo-instruct",
