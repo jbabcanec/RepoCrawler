@@ -4,40 +4,40 @@ RepoCrawler, is to open up a codebase repository, look through necessary files, 
 
 RepoCrawler/
 │
-├── main.py                  # Entry point of the application, sets up the QApplication
-├── credentials.txt                  # OpenAI API key
+├── main.py                  					# Entry point of the application, sets up the QApplication
+├── credentials.txt                  			# OpenAI API key
 ├── app/
-│   ├── __init__.py          # Initializes the Python package
+│   ├── __init__.py          					# Initializes the Python package
 │   ├── analysis/
-│   │   ├── __init__.py      # Initializes the analysis package
-│   │   ├── code_summarizer.py    # Handles AI-based summarization of code
-│   │   ├── keyword_extractor.py # Extracts keywords from the code and summaries
-│   │   └── dependency_mapper.py # Maps dependencies and imports in the code
-│   │   ├── file_parser.py   # Traverses directories and filters relevant files
-│   │   └── document_summarizer.py   # Handles summarization of repo documentation
+│   │   ├── __init__.py      					# Initializes the analysis package
+│   │   ├── code_summarizer.py    				# Handles AI-based summarization of code
+│   │   ├── keyword_extractor.py 				# Extracts keywords from the code and summaries
+│   │   └── dependency_mapper.py 				# Maps dependencies and imports in the code
+│   │   ├── file_parser.py   					# Traverses directories and filters relevant files
+│   │   └── document_summarizer.py   			# Handles summarization of repo documentation
 │   ├── config/
-│   │   ├── __init__.py      # Initializes the mapping package
-│   │   └── settings.py 		# settings for extensions for files and directories
+│   │   ├── __init__.py      					# Initializes the mapping package
+│   │   └── settings.py 						# settings for extensions for files and directories
 │   │
 │   ├── mapping/
-│   │   ├── __init__.py      # Initializes the mapping package
-│   │   └── graph_builder.py # Builds graphical representations of dependencies
+│   │   ├── __init__.py      					# Initializes the mapping package
+│   │   └── graph_builder.py 					# Builds graphical representations of dependencies
 │   │
 │   └── query/
-│       ├── __init__.py      # Initializes the mapping package
-│       ├── query_controller.py # Builds UI for chatbox
-│       └── chathandler.py # Handles chat call to chat gpt
-|
+│       ├── __init__.py      					# Initializes the mapping package
+│       ├── query_controller.py 				# Builds UI for chatbox
+│       ├── chat_handler.py 					# Handles chat call to chat gpt
+│       └── file_inquiry_handler.py 			#helps the ai know when to read in bits of code to efficiently contextualize the chatbot
 │
 ├── data/
-│   ├── [project folders]    # Data directory for storing project-specific analysis
-│   └── repo_metadata/             # carrys helper files and summaries and data from analysis
-│       ├── chat_history.txt		# Cumulative chat history
-│       ├── dependencies.txt		#lists dependencies in a script1 -> script2 format
-│       ├── directory_tree.txt		# is a tree showing the file structure
-│       └── document_summaries.txt		# gives a concsie summary of documentation files
-│       ├── keywords.txt			# gives a concise list of important keywords and concepts for each relevant file in the codebase
-│       └── summaries.txt			#gives concise summaries of all relevant files in the codebase
+│   ├── [project folders]    					# Data directory for storing project-specific analysis
+│   └── repo_metadata/             			# carrys helper files and summaries and data from analysis
+│       ├── chat_history.txt					# Cumulative chat history
+│       ├── dependencies.txt					#lists dependencies in a script1 -> script2 format
+│       ├── directory_tree.txt					# is a tree showing the file structure
+│       └── document_summaries.txt				# gives a concsie summary of documentation files
+│       ├── keywords.txt						# gives a concise list of important keywords and concepts for each relevant file in the codebase
+│       └── summaries.txt						#gives concise summaries of all relevant files in the codebase
 |
 ├── ui/
 │   ├── __init__.py          # Initializes the UI package

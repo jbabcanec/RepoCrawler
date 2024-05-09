@@ -8,10 +8,11 @@ class QueryController:
     def __init__(self, data_directory='data/repo_metadata'):
         if not os.path.exists(data_directory):
             os.makedirs(data_directory)
-        self.api_key = self.load_api_key()
-        self.file_inquiry_handler = FileInquiryHandler(self.api_key, data_directory)
-        self.chat_handler = ChatHandler(self.api_key)
         self.data_directory = data_directory
+        self.api_key = self.load_api_key()
+        directory_tree_data = self.load_metadata_files()['directory_tree']
+        self.file_inquiry_handler = FileInquiryHandler(self.api_key, directory_tree_data)
+        self.chat_handler = ChatHandler(self.api_key)
         self.history_file = os.path.join(self.data_directory, 'chat_history.txt')
         self.reset_chat_history()  # Reset chat history at the start of each run
         self.chat_history = self.load_chat_history()
@@ -52,6 +53,7 @@ class QueryController:
         if needs_files and files_needed:
             additional_context = self.file_inquiry_handler.get_file_content(files_needed)
             context += additional_context
+            print(f'additional context: {additional_context}')
 
         quit()
         response = self.chat_handler.ask_chatgpt(query, context)
