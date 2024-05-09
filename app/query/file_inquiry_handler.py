@@ -3,8 +3,10 @@ import os
 import re
 
 class FileInquiryHandler:
-    def __init__(self, api_key, directory_listing):
+    def __init__(self, api_key, directory_listing, repository_directory):
         self.api_key = api_key
+        self.repository_directory = repository_directory
+        print(f"FileInquiryHandler initialized with repository_directory: {repository_directory}")  # Debug
         self.valid_files = self.parse_directory_listing(directory_listing)
         print("Valid files extracted from directory listing:", self.valid_files)
 
@@ -38,7 +40,7 @@ class FileInquiryHandler:
             api_key=self.api_key
         )
         response_text = response.choices[0].text.strip().lower()
-        print(f'OpenAI response: {response_text}')
+        #print(f'OpenAI response: {response_text}')
         needs_files = "yes" in response_text and "no" not in response_text
         files_listed = []
         if needs_files:
@@ -57,5 +59,14 @@ class FileInquiryHandler:
         """Fetch the content of specified files, handling various file types."""
         content = ""
         for filename in filenames:
-            content += f"\n\nFile: {filename}\n(Content of {filename})"
+            print(f"Attempting to read: {filename} from {self.repository_directory}")  # Debug
+            file_path = os.path.join(self.repository_directory, filename)
+            if os.path.exists(file_path):
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        content += f"\n\nFile: {filename}\n{file.read()}"
+                except Exception as e:
+                    content += f"\n\nFile: {filename} - Error reading file: {str(e)}"
+            else:
+                content += f"\n\nFile: {filename} - Not Found"
         return content

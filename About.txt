@@ -1,6 +1,7 @@
 About:
 
-RepoCrawler, is to open up a codebase repository, look through necessary files, create notes and keywords to search for each component, map everything, and then we will create a functional UI to be able to query questions about what it does, how to operate it, etc
+RepoCrawler, is to open up a codebase repository, look through necessary files, create notes and keywords to search for each component, map everything, and then we will create a functional UI to be able to query questions about what it does, how to operate it, etc. The goal is to implement efficient and rapid
+contextualization
 
 RepoCrawler/
 │

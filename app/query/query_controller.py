@@ -5,16 +5,18 @@ from .chat_handler import ChatHandler
 from .file_inquiry_handler import FileInquiryHandler
 
 class QueryController:
-    def __init__(self, data_directory='data/repo_metadata'):
+    def __init__(self, data_directory='data/repo_metadata', repository_directory=None):
         if not os.path.exists(data_directory):
             os.makedirs(data_directory)
         self.data_directory = data_directory
+        self.repository_directory = repository_directory
+        print(f"QueryController initialized with repository_directory: {repository_directory}")  # Debug
         self.api_key = self.load_api_key()
         directory_tree_data = self.load_metadata_files()['directory_tree']
-        self.file_inquiry_handler = FileInquiryHandler(self.api_key, directory_tree_data)
+        self.file_inquiry_handler = FileInquiryHandler(self.api_key, directory_tree_data, self.repository_directory)
         self.chat_handler = ChatHandler(self.api_key)
         self.history_file = os.path.join(self.data_directory, 'chat_history.txt')
-        self.reset_chat_history()  # Reset chat history at the start of each run
+        self.reset_chat_history()
         self.chat_history = self.load_chat_history()
         self.metadata = self.load_metadata_files()
 
@@ -53,9 +55,9 @@ class QueryController:
         if needs_files and files_needed:
             additional_context = self.file_inquiry_handler.get_file_content(files_needed)
             context += additional_context
-            print(f'additional context: {additional_context}')
+            #print(f'additional context: {additional_context} ---end')
 
-        quit()
+        #quit() # break script if needed
         response = self.chat_handler.ask_chatgpt(query, context)
         self.store_chat_history(query, response)
         return response

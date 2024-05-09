@@ -43,6 +43,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.queryButton = QtWidgets.QPushButton("Query", self)
         self.queryButton.setGeometry(QtCore.QRect(80, 240, 121, 23))
         #self.queryButton.setEnabled(False)  # Initially disabled
+        #we enable the query button for debugging purposes so we are not required to read in or clone a repo, 
+        #instead we just use the repo sitting in the folder
 
         # Connect signals
         self.uploadButton.clicked.connect(self.upload_repository)
@@ -105,6 +107,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_repository_folder(self, folder_path):
         if folder_path:
             self.current_repository_folder = folder_path
+            print(f"Repository folder updated to: {self.current_repository_folder}")  # Debug statement
             self.analyzeButton.setEnabled(True)
             self.mapButton.setEnabled(True)
             QtWidgets.QMessageBox.information(self, "Clone Successful", "Repository cloned and ready for analysis.")
@@ -129,8 +132,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.queryButton.setEnabled(True)  # Enable query button after showing map
 
     def query_repository(self):
-        # Show the QueryDialog
-        self.queryDialog = QueryDialog(self)
+        # Pass the current_repository_folder to the QueryDialog
+        self.queryDialog = QueryDialog(self, self.current_repository_folder)
         self.queryDialog.show()
 
 if __name__ == "__main__":

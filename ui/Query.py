@@ -2,11 +2,12 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from app.query.query_controller import QueryController
 
 class QueryDialog(QtWidgets.QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, repository_directory=None):
         super(QueryDialog, self).__init__(parent)
         self.setWindowTitle("Query Chatbot")
-        self.resize(600, 400)  # Increased size for better readability and space
-        self.query_controller = QueryController()
+        self.resize(600, 400)
+        print(f"QueryDialog initialized with repository_directory: {repository_directory}")  # Debug
+        self.query_controller = QueryController(repository_directory=repository_directory)
 
         layout = QtWidgets.QVBoxLayout(self)
         self.textEdit = QtWidgets.QTextEdit(self)

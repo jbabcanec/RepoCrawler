@@ -1,0 +1,37 @@
+1. You: give me the first code block in the main script|1. Bot: #main.py
+
+import csv
+import sys
+from PyQt5.QtWidgets import QApplication, QMessageBox
+
+from init_questions import InitQuestions
+from gps_panel import GPSPanel
+from final_checklist import FinalChecklist 
+from send_to_ai import GPTTurboProcessor
+
+class MainController:
+    def __init__(self, app):
+        self.app = app
+
+        # Read the API key from credentials.txt
+        with open('credentials.txt', 'r') as file:
+            api_key = file.read().strip()
+
+        self.gpt_processor = GPTTurboProcessor(api_key)  # API key is read from credentials.txt
+
+        # Initialize userInputs before creating other instances
+        self.userInputs = {}
+
+        self.init_questions = InitQuestions(self)
+        self.gps_panel = GPSPanel(self)
+        self.final_checklist = FinalChecklist(self)  # Create an instance of FinalChecklist
+
+        # Connect signals to handlers
+        self.init_questions.nextClicked.connect(self.collectDataAndShowGPSPanel)
+        self.gps_panel.nextClicked.connect(self.collectDataAndShowFinalChecklist)
+        self.final_checklist.nextClicked.connect(self.finishOrNextPanel)  # Assuming you have another panel or a finish method
+
+        # Variables to store user inputs
+        self.userInputs = {}
+2. You: how much does the sun weigh|2. Bot: The first code block in the main script is the import of necessary libraries and the initialization of the MainController class. This includes importing PyQt5, init_questions.py, gps_panel.py, final_checklist.py, and send_to_ai.py.
+3. You: what does this repo generally do|3. Bot: This repository contains code for an itinerary builder called DayMaker, which uses the GPT-4 API to generate a detailed hour-by-hour itinerary. It collects user input, processes it with external libraries, and displays the generated itinerary to the user.
