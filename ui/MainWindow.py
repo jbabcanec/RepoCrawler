@@ -131,10 +131,29 @@ class MainWindow(QtWidgets.QMainWindow):
         print("Show map clicked")
         self.queryButton.setEnabled(True)  # Enable query button after showing map
 
+    def check_for_default_repository(self):
+        """Automatically set the repository folder to the first available one."""
+        data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../data")
+        repos = [d for d in os.listdir(data_directory) if os.path.isdir(os.path.join(data_directory, d)) and '_repo' in d]
+        if repos:
+            self.current_repository_folder = os.path.join(data_directory, repos[0])
+            print(f"Automatically selected repository directory: {self.current_repository_folder}")
+            self.analyzeButton.setEnabled(True)
+            self.mapButton.setEnabled(True)
+        else:
+            print("No default repository folder found.")
+            self.current_repository_folder = None
+
     def query_repository(self):
-        # Pass the current_repository_folder to the QueryDialog
-        self.queryDialog = QueryDialog(self, self.current_repository_folder)
-        self.queryDialog.show()
+        # Ensure there's a repository folder before querying
+        if not self.current_repository_folder:
+            self.check_for_default_repository()  # Check again in case it wasn't set during initialization
+
+        if self.current_repository_folder:
+            self.queryDialog = QueryDialog(self, self.current_repository_folder)
+            self.queryDialog.show()
+        else:
+            QtWidgets.QMessageBox.warning(self, "No Repository", "Please upload or clone a repository first.")
 
 if __name__ == "__main__":
     import sys
