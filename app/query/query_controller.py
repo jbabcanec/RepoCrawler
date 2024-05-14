@@ -51,16 +51,17 @@ class QueryController:
     def send_query(self, query):
         context = self.get_context()
         chat_history_as_string = "\n".join(f"{item[0]} {item[1]}" for item in self.chat_history)
-        needs_files, files_needed = self.file_inquiry_handler.should_fetch_files(query, context, chat_history_as_string)
+        needs_files, files_needed, file_tokens = self.file_inquiry_handler.should_fetch_files(query, context, chat_history_as_string)
         if needs_files and files_needed:
-            additional_context = self.file_inquiry_handler.get_file_content(files_needed)
+            additional_context, file_content_tokens = self.file_inquiry_handler.get_file_content(files_needed)
             context += additional_context
-            #print(f'additional context: {additional_context} ---end')
+        else:
+            file_content_tokens = 0
 
-        #quit() # break script if needed
-        response = self.chat_handler.ask_chatgpt(query, context)
+        response, response_tokens = self.chat_handler.ask_chatgpt(query, context)
         self.store_chat_history(query, response)
-        return response
+        total_tokens = response_tokens + file_tokens + file_content_tokens
+        return response, total_tokens
 
     def load_chat_history(self):
         try:

@@ -20,7 +20,6 @@ class FileInquiryHandler:
                 filenames.add(filename)  # Use 'add' instead of 'append' for a set
         return list(filenames)  # Convert set back to list if necessary for further processing
 
-
     def should_fetch_files(self, question, context, chat_history):
         """Ask GPT if specific files are necessary to enhance the answer to a question."""
         prompt = (f"Context: {context}\nRecent Conversations: \n{chat_history}\nGiven the comprehensive summary and keywords already provided, "
@@ -43,11 +42,12 @@ class FileInquiryHandler:
         #print(f'OpenAI response: {response_text}')
         needs_files = "yes" in response_text and "no" not in response_text
         files_listed = []
+        file_tokens = response.usage['total_tokens']
         if needs_files:
             tentative_files = re.findall(r'\b[\w-]+?\.\w+\b', response_text)
             files_listed = self.validate_file_names(tentative_files)
         print(f'Files listed: {files_listed}')
-        return needs_files, files_listed
+        return needs_files, files_listed, file_tokens
 
     def validate_file_names(self, tentative_files):
         """Ensure only unique valid filenames are listed."""
@@ -58,15 +58,18 @@ class FileInquiryHandler:
     def get_file_content(self, filenames):
         """Fetch the content of specified files, handling various file types."""
         content = ""
+        total_tokens = 0
         for filename in filenames:
             print(f"Attempting to read: {filename} from {self.repository_directory}")  # Debug
             file_path = os.path.join(self.repository_directory, filename)
             if os.path.exists(file_path):
                 try:
                     with open(file_path, 'r', encoding='utf-8') as file:
-                        content += f"\n\nFile: {filename}\n{file.read()}"
+                        file_content = file.read()
+                        content += f"\n\nFile: {filename}\n{file_content}"
+                        total_tokens += len(file_content.split())
                 except Exception as e:
                     content += f"\n\nFile: {filename} - Error reading file: {str(e)}"
             else:
                 content += f"\n\nFile: {filename} - Not Found"
-        return content
+        return content, total_tokens

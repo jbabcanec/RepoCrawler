@@ -44,8 +44,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.queryButton = QtWidgets.QPushButton("Query", self)
         self.queryButton.setGeometry(QtCore.QRect(80, 240, 121, 23))
         self.queryButton.setEnabled(False)  # Initially disabled
-        #we enable the query button for debugging purposes so we are not required to read in or clone a repo, 
-        #instead we just use the repo sitting in the folder
+        # we enable the query button for debugging purposes so we are not required to read in or clone a repo,
+        # instead we just use the repo sitting in the folder
 
         # Connect signals
         self.uploadButton.clicked.connect(self.upload_repository)
@@ -75,18 +75,26 @@ class MainWindow(QtWidgets.QMainWindow):
         data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../data")
         repos = [d for d in os.listdir(data_directory) if os.path.isdir(os.path.join(data_directory, d)) and '_repo' in d]
         repo_metadata_path = os.path.join(data_directory, "repo_metadata")
+        
         if repos:
             self.current_repository_folder = os.path.join(data_directory, repos[0])
             print(f"Automatically selected repository directory: {self.current_repository_folder}")
             self.analyzeButton.setEnabled(True)
-            if os.path.exists(repo_metadata_path):
-                self.readmeButton.setEnabled(True)  # Enable if repo_metadata exists
+            if os.path.exists(repo_metadata_path) and os.listdir(repo_metadata_path):  # Check if repo_metadata exists and is not empty
+                self.readmeButton.setEnabled(True)
+                self.queryButton.setEnabled(True)
+            else:
+                self.readmeButton.setEnabled(False)
+                self.queryButton.setEnabled(False)
         else:
             print("No default repository folder found.")
             self.current_repository_folder = None
-            if os.path.exists(repo_metadata_path):
+            if os.path.exists(repo_metadata_path) and os.listdir(repo_metadata_path):  # Check if repo_metadata exists and is not empty
                 self.readmeButton.setEnabled(True)
                 self.queryButton.setEnabled(True)
+            else:
+                self.readmeButton.setEnabled(False)
+                self.queryButton.setEnabled(False)
 
     def upload_repository(self):
         source_folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Repository Folder')
@@ -118,6 +126,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.current_repository_folder = None
         else:
             QtWidgets.QMessageBox.warning(self, "Upload Canceled", "No folder selected.")
+        
+        self.check_for_default_repository()  # Recheck after uploading
 
     def show_clone_repo_dialog(self):
         self.dialog = CloneRepoDialog(self, callback=self.update_repository_folder)
@@ -132,6 +142,8 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.information(self, "Clone Successful", "Repository cloned and ready for analysis.")
         else:
             QtWidgets.QMessageBox.warning(self, "Clone Failed", "The repository could not be cloned.")
+        
+        self.check_for_default_repository()  # Recheck after cloning
 
     def analyze_repository(self):
         if self.current_repository_folder:

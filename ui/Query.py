@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from app.query.query_controller import QueryController
+import time
 
 class QueryDialog(QtWidgets.QDialog):
     def __init__(self, parent=None, repository_directory=None):
@@ -10,6 +11,17 @@ class QueryDialog(QtWidgets.QDialog):
         self.query_controller = QueryController(repository_directory=repository_directory)
 
         layout = QtWidgets.QVBoxLayout(self)
+
+        # Token and Timer Information
+        self.infoLayout = QtWidgets.QHBoxLayout()
+        self.tokenLabel = QtWidgets.QLabel("Tokens: 0", self)
+        self.timeLabel = QtWidgets.QLabel("Time: 0s", self)
+        self.tokensPerMinuteLabel = QtWidgets.QLabel("Tokens/Minute: 0", self)
+        self.infoLayout.addWidget(self.tokenLabel)
+        self.infoLayout.addWidget(self.timeLabel)
+        self.infoLayout.addWidget(self.tokensPerMinuteLabel)
+        layout.addLayout(self.infoLayout)
+
         self.textEdit = QtWidgets.QTextEdit(self)
         self.textEdit.setReadOnly(True)
         self.textEdit.setStyleSheet("background-color: #f0f0f0; font-family: Arial; font-size: 14px;")
@@ -25,6 +37,9 @@ class QueryDialog(QtWidgets.QDialog):
         layout.addWidget(self.inputLine)
         layout.addWidget(self.sendButton)
 
+        self.startTime = 0
+        self.totalTokens = 0
+
     def process_query(self):
         query_text = self.inputLine.text().strip()
         if query_text:
@@ -33,7 +48,20 @@ class QueryDialog(QtWidgets.QDialog):
 
             QtWidgets.QApplication.processEvents()  # Update UI to show loading message
 
-            response_text = self.query_controller.send_query(query_text)
+            # Start the timer
+            self.startTime = time.time()
+
+            response_text, token_count = self.query_controller.send_query(query_text)
+
+            # Stop the timer
+            elapsed_time = time.time() - self.startTime
+            tokens_per_minute = (token_count / elapsed_time) * 60 if elapsed_time > 0 else 0
+
+            # Update the UI elements
+            self.totalTokens += token_count
+            self.tokenLabel.setText(f"Tokens: {self.totalTokens}")
+            self.timeLabel.setText(f"Time: {elapsed_time:.2f}s")
+            self.tokensPerMinuteLabel.setText(f"Tokens/Minute: {tokens_per_minute:.2f}")
 
             # Formatting the response based on content
             formatted_response = self.format_response(response_text)

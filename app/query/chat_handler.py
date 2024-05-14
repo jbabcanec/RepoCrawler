@@ -11,7 +11,6 @@ class ChatHandler:
             "provide informed responses about the codebase, its usage, and documentation. Below is the project context:\n"
         )
         full_prompt = f"{role_description}{context}\nQuestion: {question}\nAnswer:"
-        #print(full_prompt)
         try:
             response = openai.Completion.create(
                 model="gpt-3.5-turbo-instruct",
@@ -23,6 +22,8 @@ class ChatHandler:
                 stop=None,
                 api_key=self.api_key
             )
-            return response.choices[0].text.strip()
+            response_text = response.choices[0].text.strip()
+            token_count = response.usage['total_tokens']
+            return response_text, token_count
         except Exception as e:
-            return f"Failed to call ChatGPT API: {str(e)}"
+            return f"Failed to call ChatGPT API: {str(e)}", 0
